@@ -37,7 +37,6 @@ function Userlogin() {
         setRedirect(true);
         updateuser(res.data);
         updatelogin(true);
-        console.log(res.data);
       })
       .catch((e) => {
         setErrormessage("Invalid Email or Password");

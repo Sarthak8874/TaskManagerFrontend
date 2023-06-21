@@ -5,28 +5,31 @@ import { Link } from "react-router-dom";
 
 function Deletetask() {
   const [task, setTask] = useState([]);
-  const { login, user } = useContext(LoginContext);
-
+  const { user } = useContext(LoginContext);
   useEffect(() => {
+    fetchdata();
+  }, []);
+  const handledeleteclick = (taskid) => {
+    axios
+      .delete(`https://taskmanagerapp-xlfw.onrender.com/task/${taskid}`, {
+        params: { token: user.token },
+      })
+      .then((res) => {
+        fetchdata();
+      })
+      .catch((e) => {});
+  };
+  const fetchdata = async () => {
     axios
       .get("https://taskmanagerapp-xlfw.onrender.com/task", {
         params: { token: user.token },
       })
       .then((res) => {
         setTask(res.data);
-        console.log(res.data);
       })
       .catch((e) => {
         console.log(e);
       });
-  }, [user.token, login, user.user]);
-  const handledeleteclick = (taskid) => {
-    axios
-      .delete(`https://taskmanagerapp-xlfw.onrender.com/task/${taskid}`, {
-        params: { token: user.token }
-      })
-      .then((res) => {console.log("deleted")})
-      .catch((e) => {});
   };
   return (
     <>

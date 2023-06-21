@@ -12,7 +12,6 @@ function Userlogout() {
       .then((res) => {
         updatelogin(false);
         updateuser({});
-        console.log(res);
       })
       .catch((e) => {
         console.log(e);

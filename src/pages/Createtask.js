@@ -18,7 +18,6 @@ function Createtask() {
         token: user.token,
       })
       .then((response) => {
-        console.log(response.data);
         setTaskDescription("");
       })
       .catch((error) => {

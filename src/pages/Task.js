@@ -9,20 +9,10 @@ function Task() {
   const [status, setStatus] = useState(false);
   const [editTaskId, setEditTaskId] = useState(null);
   const { login, user } = useContext(LoginContext);
-  console.log(editTaskId);
+
   useEffect(() => {
-    axios
-      .get("https://taskmanagerapp-xlfw.onrender.com/task", {
-        params: { token: user.token },
-      })
-      .then((res) => {
-        setTask(res.data);
-        console.log(res.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, [user.token, login, user.user]);
+     fetchTaskData()
+  }, []);
 
   const handleEditClick = (taskId, description, status) => {
     setEditTaskId(taskId);
@@ -36,12 +26,25 @@ function Task() {
         description: description,
         completed: status,
       })
-      .then((res) => {
+      .then((res) => { 
         setEditTaskId(null);
+        fetchTaskData()
+
       })
       .catch((e) => {});
   };
-  console.log(task);
+  const fetchTaskData = async () => {
+    axios
+      .get("https://taskmanagerapp-xlfw.onrender.com/task", {
+        params: { token: user.token },
+      })
+      .then((res) => {
+        setTask(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   return (
     <>
       <div className="max-w-980 px-4 mt-4 mx-auto flex justify-between items-center mb-4">
