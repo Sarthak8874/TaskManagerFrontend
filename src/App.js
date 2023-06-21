@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import Task from "./pages/Task";
 import Userlogout from "./pages/Userlogout";
 import Createtask from "./pages/Createtask";
+import Deletetask from "./pages/Deletetask";
 
 function App() {
   return (
@@ -62,6 +63,14 @@ function App() {
           element={
             <>
             <Createtask/>
+            </>
+          }
+          />
+          <Route
+          path="/delete-task"
+          element = {
+            <>
+            <Deletetask/>
             </>
           }
           />

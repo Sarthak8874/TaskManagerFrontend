@@ -1,10 +1,12 @@
 import axios from "axios";
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../context/LoginContext";
 
 function UserSignup() {
   const [name, setName] = useState("");
+  const {updatelogin,updateuser} = useContext(LoginContext)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errormessage, setErrormessage] = useState("");
@@ -13,7 +15,7 @@ function UserSignup() {
 
   useEffect(() => {
     if (redirect) {
-      navigate("/profile");
+      navigate("/task");
     }
   }, [redirect,navigate]);
 
@@ -35,12 +37,13 @@ function UserSignup() {
         password: password,
       })
       .then((res) => {
+        updateuser(res.data)
+        updatelogin(true)
         setEmail("");
         setPassword("");
         setName("");
         setErrormessage("");
         setRedirect(true);
-        console.log(res.data);
       })
       .catch((error) => {
         if (error.response && error.response.status === 400) {

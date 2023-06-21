@@ -12,7 +12,7 @@ function Navbar() {
   const EventLinks = [
     { Event: "Home", Link: "/", icons: "" },
     { Event: "ViewTask", Link: "/task", icons: "" },
-    { Event: "UpdateTask", Link: "/", icons: "" },
+    { Event: "DeleteTask", Link: "/delete-task", icons: "" },
     { Event: "Profile", Link: "/profile", icons: "" },
   ];
   const handlemenuicon = () => {
@@ -58,8 +58,7 @@ function Navbar() {
               <Link to="/logout">
                 <button className="ml-2 mr-2 text-white text-center">
                   <AiOutlineUser className="w-full flex justify-center" />
-                  <p className="logoutbutton">{user.user.name}</p>
-                  <p className="logoutbuttonuser">Logout</p>
+                   Logout
                 </button>
               </Link>
             )}

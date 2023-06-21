@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { LoginContext } from "../context/LoginContext";
-
+import { Link } from "react-router-dom";
 function Createtask() {
   const [taskDescription, setTaskDescription] = useState("");
   const { user } = useContext(LoginContext);
@@ -46,12 +46,19 @@ function Createtask() {
             required
           />
         </div>
-        <button
-          className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-700"
-          type="submit"
-        >
-          Create Task
-        </button>
+        <div className="w-full flex justify-between">
+          <button
+            className="bg-black text-white  py-2 px-4 rounded-lg hover:bg-gray-700"
+            type="submit"
+          >
+            Create Task
+          </button>
+          <Link to='/task'
+            className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-700"
+          >
+            Back
+          </Link>
+        </div>
       </form>
     </div>
   );
