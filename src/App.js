@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import "./index.css";
 import Navbar from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -10,72 +10,81 @@ import Task from "./pages/Task";
 import Userlogout from "./pages/Userlogout";
 import Createtask from "./pages/Createtask";
 import Deletetask from "./pages/Deletetask";
+import Home from "./pages/Home";
 
 function App() {
   return (
     <>
-    <React.StrictMode>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route
-            path="/login"
-            element={
-              <>
-                <Userlogin />
-              </>
-            }
-          />
-             <Route
-            path="/signup"
-            element={
-              <>
-                <UserSignup/>
-              </>
-            }
-          />
+      <React.StrictMode>
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
             <Route
-            path="/logout"
-            element={
-              <>
-                <Userlogout/>
-              </>
-            }
-          />
-           <Route
-            path="/profile"
-            element={
-              <>
-                <Profile/>
-              </>
-            }
-          />
-          <Route
-          path="/task"
-          element={
-            <>
-            <Task/>
-            </>
-          }
-          />
-           <Route
-          path="/create-task"
-          element={
-            <>
-            <Createtask/>
-            </>
-          }
-          />
-          <Route
-          path="/delete-task"
-          element = {
-            <>
-            <Deletetask/>
-            </>
-          }
-          />
-        </Routes>
-      </BrowserRouter>
+              path="/login"
+              element={
+                <>
+                  <Userlogin />
+                </>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <>
+                  <UserSignup />
+                </>
+              }
+            />
+            <Route
+              path="/logout"
+              element={
+                <>
+                  <Userlogout />
+                </>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <>
+                  <Profile />
+                </>
+              }
+            />
+            <Route
+              path="/task"
+              element={
+                <>
+                  <Task />
+                </>
+              }
+            />
+            <Route
+              path="/create-task"
+              element={
+                <>
+                  <Createtask />
+                </>
+              }
+            />
+            <Route
+              path="/"
+              element={
+                <>
+                  <Home />
+                </>
+              }
+            />
+            <Route
+              path="/delete-task"
+              element={
+                <>
+                  <Deletetask />
+                </>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
       </React.StrictMode>
     </>
   );

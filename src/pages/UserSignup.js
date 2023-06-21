@@ -1,12 +1,15 @@
 import axios from "axios";
-import React, { useState,useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../context/LoginContext";
+import LoadingBar from 'react-top-loading-bar'
+
 
 function UserSignup() {
   const [name, setName] = useState("");
-  const {updatelogin,updateuser} = useContext(LoginContext)
+  const [progress, setProgress] = useState(0);
+  const { updatelogin, updateuser } = useContext(LoginContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errormessage, setErrormessage] = useState("");
@@ -15,9 +18,10 @@ function UserSignup() {
 
   useEffect(() => {
     if (redirect) {
+      setProgress(progress+30)
       navigate("/task");
     }
-  }, [redirect,navigate]);
+  }, [redirect, navigate]);
 
   const handlechangename = (event) => {
     setName(event.target.value);
@@ -30,6 +34,7 @@ function UserSignup() {
   };
   const handlesignup = (e) => {
     e.preventDefault();
+    setProgress(progress+20)
     axios
       .post("https://taskmanagerapp-xlfw.onrender.com/users", {
         name: name,
@@ -37,17 +42,19 @@ function UserSignup() {
         password: password,
       })
       .then((res) => {
-        updateuser(res.data)
-        updatelogin(true)
+        setProgress(progress+10)
+        updateuser(res.data);
+        updatelogin(true);
         setEmail("");
         setPassword("");
+        setProgress(progress+20)
         setName("");
         setErrormessage("");
+        setProgress(progress+20)
         setRedirect(true);
       })
       .catch((error) => {
         if (error.response && error.response.status === 400) {
-          // Handle 400 Bad Request
           if (error.response.data.keyPattern) {
             setErrormessage("Already Have a exist Email");
             console.log(error.response.data);
@@ -61,9 +68,15 @@ function UserSignup() {
         }
       });
   };
- 
+
   return (
     <>
+      <LoadingBar
+        color="#00BFFF"
+        progress={progress}
+        height={4}
+        onLoaderFinished={() => setProgress(0)}
+      />
       <div className="bg-white  flex relative top-10 max-w-500 m-auto items-center justify-center">
         <form
           className="bg-white p-6 rounded-lg shadow-md w-full"

@@ -19,6 +19,8 @@ module.exports = {
       800: "800px",
       600:"600px",
       500: "500px",
+      128: "128px",
+      50: "50px",
       full:"100%",
     },
     absoluteTop: {

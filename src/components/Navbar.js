@@ -18,7 +18,6 @@ function Navbar() {
   const handlemenuicon = () => {
     setNav(!nav);
   };
-  
   return (
     <>
       <nav className=" bg-black">
@@ -29,8 +28,8 @@ function Navbar() {
           >
             {nav ? <IoMenuOutline /> : <RxCross2 />}
           </div>
-          <div className="flex h-full items-center">
-            <img alt="loding" src="/jfnj" className=""></img>
+          <div className="flex items-center justify-between text-white text-lg">
+           Hi<spam className='font-bold'>! {user?.user?.name ? user.user.name.split(" ")[0]:"User"}</spam>
           </div>
           <div className="hidden md:block">
             <ul className="flex h-full items-center">

@@ -2,19 +2,28 @@ import React, { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../context/LoginContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import LoadingBar from "react-top-loading-bar";
 
 function Deletetask() {
   const [task, setTask] = useState([]);
-  const { user } = useContext(LoginContext);
+  const [progress, setProgress] = useState(0);
+  const { updatelogin, user, updateuser } = useContext(LoginContext);
   useEffect(() => {
+    if (localStorage.getItem("storeval")) {
+      updateuser(JSON.parse(localStorage.getItem("user")));
+      updatelogin(localStorage.getItem("login"));
+    }
+    setProgress(30);
     fetchdata();
   }, []);
   const handledeleteclick = (taskid) => {
+    setProgress(30)
     axios
       .delete(`https://taskmanagerapp-xlfw.onrender.com/task/${taskid}`, {
         params: { token: user.token },
       })
       .then((res) => {
+        setProgress(60)
         fetchdata();
       })
       .catch((e) => {});
@@ -26,6 +35,7 @@ function Deletetask() {
       })
       .then((res) => {
         setTask(res.data);
+        setProgress(100);
       })
       .catch((e) => {
         console.log(e);
@@ -33,6 +43,12 @@ function Deletetask() {
   };
   return (
     <>
+      <LoadingBar
+        color="#00BFFF"
+        progress={progress}
+        height={4}
+        onLoaderFinished={() => setProgress(0)}
+      />
       <div className="max-w-980 px-4 mt-4 mx-auto flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Task List</h2>
         <Link

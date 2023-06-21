@@ -2,16 +2,23 @@ import React, { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../context/LoginContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import LoadingBar from "react-top-loading-bar";
 
 function Task() {
   const [task, setTask] = useState([]);
+  const [progress, setProgress] = useState(0);
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState(false);
   const [editTaskId, setEditTaskId] = useState(null);
-  const { login, user } = useContext(LoginContext);
+  const { updatelogin, user, updateuser } = useContext(LoginContext);
 
   useEffect(() => {
-     fetchTaskData()
+    if (localStorage.getItem("storeval")) {
+      updateuser(JSON.parse(localStorage.getItem("user")));
+      updatelogin(localStorage.getItem("login"));
+    }
+    setProgress(30);
+    fetchTaskData();
   }, []);
 
   const handleEditClick = (taskId, description, status) => {
@@ -20,16 +27,17 @@ function Task() {
     setStatus(status);
   };
   const handleSaveClick = () => {
+    setProgress(30);
     axios
       .patch(`https://taskmanagerapp-xlfw.onrender.com/task/${editTaskId}`, {
         token: user.token,
         description: description,
         completed: status,
       })
-      .then((res) => { 
+      .then((res) => {
+        setProgress(60);
         setEditTaskId(null);
-        fetchTaskData()
-
+        fetchTaskData();
       })
       .catch((e) => {});
   };
@@ -39,6 +47,7 @@ function Task() {
         params: { token: user.token },
       })
       .then((res) => {
+        setProgress(100);
         setTask(res.data);
       })
       .catch((e) => {
@@ -47,6 +56,12 @@ function Task() {
   };
   return (
     <>
+      <LoadingBar
+        color="#00BFFF"
+        progress={progress}
+        height={4}
+        onLoaderFinished={() => setProgress(0)}
+      />
       <div className="max-w-980 px-4 mt-4 mx-auto flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Task List</h2>
         <Link
@@ -101,10 +116,10 @@ function Task() {
                     {editTaskId === task._id ? (
                       <select
                         value={status}
+                        className={`border p-1 text-black`}
                         onChange={(e) => {
                           setStatus(e.target.value);
                         }}
-                        className={`border p-1 `}
                       >
                         <option
                           value={true}

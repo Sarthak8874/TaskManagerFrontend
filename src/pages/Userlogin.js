@@ -3,9 +3,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../context/LoginContext";
+import LoadingBar from "react-top-loading-bar";
 
 function Userlogin() {
   const [email, setEmail] = useState("");
+  const [progress, setProgress] = useState(0);
   const [password, setPassword] = useState("");
   const [errormessage, setErrormessage] = useState("");
   const [redirect, setRedirect] = useState(false);
@@ -15,6 +17,7 @@ function Userlogin() {
 
   useEffect(() => {
     if (redirect) {
+      setProgress(progress + 30);
       navigate("/task");
     }
   }, [redirect, navigate]);
@@ -26,6 +29,7 @@ function Userlogin() {
   };
   const handlechangelogin = (e) => {
     e.preventDefault();
+    setProgress(progress + 20);
     axios
       .post("https://taskmanagerapp-xlfw.onrender.com/users/login", {
         email: email,
@@ -33,10 +37,13 @@ function Userlogin() {
       })
       .then((res) => {
         setEmail("");
+        setProgress(progress + 10);
         setPassword("");
         setRedirect(true);
+        setProgress(progress + 20);
         updateuser(res.data);
         updatelogin(true);
+        setProgress(progress + 20);
       })
       .catch((e) => {
         setErrormessage("Invalid Email or Password");
@@ -45,6 +52,13 @@ function Userlogin() {
   };
   return (
     <>
+      {" "}
+      <LoadingBar
+        color="#00BFFF"
+        progress={progress}
+        height={4}
+        onLoaderFinished={() => setProgress(0)}
+      />
       <div className="bg-white relative top-10 max-w-500 m-auto flex items-center justify-center p-4">
         <form
           className="bg-white p-6 rounded-lg shadow-md w-full"
