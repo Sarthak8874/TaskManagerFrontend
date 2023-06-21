@@ -3,11 +3,19 @@ import { LoginContext } from "../context/LoginContext";
 import LoadingBar from "react-top-loading-bar";
 
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Userlogout() {
   const [progress, setProgress] = useState(0);
+  const [redirect,setRedirect] = useState(false)
   const { updatelogin, user, updateuser } = useContext(LoginContext);
-  
+
+  const navigate = useNavigate()
+  useEffect(()=>{
+   if(redirect){
+    navigate('/login')
+   }
+  },[redirect])
   useEffect(() => {
     setProgress(40)
     axios
@@ -19,6 +27,7 @@ function Userlogout() {
         updateuser({});
         localStorage.clear()
         setProgress(100)
+        setRedirect(true)
       })
       .catch((e) => {
         console.log(e);

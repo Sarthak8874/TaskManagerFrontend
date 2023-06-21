@@ -1,10 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { LoginContext } from "../context/LoginContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function Createtask() {
   const [taskDescription, setTaskDescription] = useState("");
-  const { user } = useContext(LoginContext);
+  const { login, user } = useContext(LoginContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!login) {
+      navigate("/");
+    }
+  }, []);
   const handleTaskDescriptionChange = (event) => {
     setTaskDescription(event.target.value);
   };
@@ -52,7 +59,8 @@ function Createtask() {
           >
             Create Task
           </button>
-          <Link to='/task'
+          <Link
+            to="/task"
             className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-700"
           >
             Back

@@ -19,7 +19,7 @@ function UserSignup() {
   useEffect(() => {
     if (redirect) {
       setProgress(progress+30)
-      navigate("/task");
+      navigate("/profile");
     }
   }, [redirect, navigate]);
 

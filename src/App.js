@@ -11,8 +11,10 @@ import Userlogout from "./pages/Userlogout";
 import Createtask from "./pages/Createtask";
 import Deletetask from "./pages/Deletetask";
 import Home from "./pages/Home";
+import { LoginContext } from "./context/LoginContext";
 
 function App() {
+  const { login } = useContext(LoginContext);
   return (
     <>
       <React.StrictMode>
@@ -47,6 +49,7 @@ function App() {
               path="/profile"
               element={
                 <>
+                  {" "}
                   <Profile />
                 </>
               }

@@ -1,7 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import { LoginContext } from "../context/LoginContext";
+import userimage from "../userimage.webp";
 import LoadingBar from "react-top-loading-bar";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const [progress, setProgress] = useState(0);
@@ -11,10 +13,15 @@ function Profile() {
   const [email, setEmail] = useState(user?.user?.email);
   const [image, setImage] = useState(null);
   const [imagebase, setImagebase] = useState(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (localStorage.getItem("storeval")) {
       updateuser(JSON.parse(localStorage.getItem("user")));
       updatelogin(localStorage.getItem("login"));
+    }
+    if (!login) {
+      navigate("/");
     }
   }, []);
 
@@ -43,7 +50,7 @@ function Profile() {
   const handleImageUploadbutton = () => {
     let formData = new FormData();
     formData.append("avatar", image);
-    setProgress(40)
+    setProgress(40);
     axios
       .post(
         "https://taskmanagerapp-xlfw.onrender.com/users/me/avatar",
@@ -56,7 +63,7 @@ function Profile() {
       )
       .then((res) => {
         updateuser(res.data);
-        setProgress(100)
+        setProgress(100);
       })
       .catch((e) => {});
   };
@@ -75,7 +82,11 @@ function Profile() {
               <div className="w-128 h-32 overflow-hidden rounded-full flex flex-col justify-around text-center">
                 <img
                   className="h-40 object-cover"
-                  src={`data:image/png;base64,${user?.user.avatar}`}
+                  src={
+                    user?.user?.avatar
+                      ? `data:image/png;base64,${user?.user?.avatar}`
+                      : userimage
+                  }
                 />
               </div>
             </div>

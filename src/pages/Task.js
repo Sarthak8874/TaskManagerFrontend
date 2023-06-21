@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../context/LoginContext";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 
 function Task() {
@@ -10,9 +10,13 @@ function Task() {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState(false);
   const [editTaskId, setEditTaskId] = useState(null);
-  const { updatelogin, user, updateuser } = useContext(LoginContext);
+  const { login, updatelogin, user, updateuser } = useContext(LoginContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!login) {
+      navigate("/");
+    }
     if (localStorage.getItem("storeval")) {
       updateuser(JSON.parse(localStorage.getItem("user")));
       updatelogin(localStorage.getItem("login"));
