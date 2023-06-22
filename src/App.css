@@ -14,3 +14,10 @@
 .homemessage {
     min-height: 90vh;
 }
+
+.filter {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    border-radius: 20px;
+}

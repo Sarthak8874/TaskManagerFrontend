@@ -1,16 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import  {LoginContextProvider}  from './context/LoginContext';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { LoginContextProvider } from "./context/LoginContext";
+import { SortbyContextProvider } from "./context/SortbyContext";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <LoginContextProvider>
-    <App />
-    </LoginContextProvider>
+    <SortbyContextProvider>
+      <LoginContextProvider>
+        <App />
+      </LoginContextProvider>
+    </SortbyContextProvider>
   </React.StrictMode>
 );
 

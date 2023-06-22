@@ -4,16 +4,21 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 import Message from "../components/Message";
+import { SortbyContext } from "../context/SortbyContext";
+import Sortby from "../components/Sortby";
 
 function Deletetask() {
   const [task, setTask] = useState([]);
   const [message, setMessage] = useState([]);
-  const [messagetype, setMessagetype] = useState("");
+  const [skip, setSkip] = useState(0);
   const [progress, setProgress] = useState(0);
   const { login, updatelogin, user, updateuser } = useContext(LoginContext);
+  const { status } = useContext(SortbyContext);
 
   const navigate = useNavigate();
-
+  useEffect(() => {
+    fetchdata();
+  }, [skip, status]);
   useEffect(() => {
     if (!login) {
       navigate("/");
@@ -35,18 +40,20 @@ function Deletetask() {
         setProgress(60);
         fetchdata();
         setMessage(["Task Deleted", "success"]);
-        setMessagetype("fail");
         setTimeout(() => {
           setMessage([]);
         }, 1200);
       })
       .catch((e) => {});
   };
-  const fetchdata = async () => {
+  const fetchdata = () => {
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/task`, {
-        params: { token: user.token },
-      })
+      .get(
+        `${process.env.REACT_APP_API_BASE_URL}/task?sortBy=completed:${status}&limit=5&skip=${skip}`,
+        {
+          params: { token: user.token },
+        }
+      )
       .then((res) => {
         setTask(res.data);
         setProgress(100);
@@ -54,6 +61,14 @@ function Deletetask() {
       .catch((e) => {
         console.log(e);
       });
+  };
+  const handleback = () => {
+    setSkip(skip - 5);
+    setProgress(20);
+  };
+  const handlenext = () => {
+    setSkip(skip + 5);
+    setProgress(20);
   };
   return (
     <>
@@ -72,6 +87,9 @@ function Deletetask() {
         >
           Create Task
         </Link>
+      </div>
+      <div className="max-w-980 px-4  mx-auto flex justify-between items-center mb-4">
+        <Sortby />
       </div>
       <div className="w-full flex justify-center">
         <div className="w-980 overflow-auto flex flex-col justify-center p-4">
@@ -124,6 +142,26 @@ function Deletetask() {
             </tbody>
           </table>
         </div>
+      </div>
+      <div className="max-w-800 px-4 mt-4 mx-auto flex justify-between items-center">
+        <button
+          onClick={() => handleback()}
+          className={` text-white py-2 px-4 rounded-lg hover:bg-gray-700 ${
+            skip === 0 ? "bg-gray-700" : "bg-black"
+          }`}
+          disabled={skip === 0 ? true : false}
+        >
+          Back
+        </button>
+        <button
+          onClick={() => handlenext()}
+          disabled={task.length <= 4 ? true : false}
+          className={` text-white py-2 px-4 rounded-lg hover:bg-gray-700 ${
+            task.length <= 4 ? "bg-gray-700" : "bg-black"
+          }`}
+        >
+          Next
+        </button>
       </div>
     </>
   );
