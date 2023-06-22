@@ -4,9 +4,11 @@ import userimage from "../userimage.webp";
 import LoadingBar from "react-top-loading-bar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Message from "../components/Message";
 
 function Profile() {
   const [progress, setProgress] = useState(0);
+  const [message, setMessage] = useState([]);
   const [editbutton, setEditbutton] = useState(false);
   const { login, updatelogin, user, updateuser } = useContext(LoginContext);
   const [name, setName] = useState(user?.user?.name);
@@ -25,12 +27,11 @@ function Profile() {
       navigate("/");
     }
     setProgress(100);
-  }, []);
+  }, [login]);
   const handleeditbutton = () => {
     setEditbutton(!editbutton);
   };
   const handlesavebutton = () => {
-    setEditbutton(!editbutton);
     setProgress(30);
     axios
       .patch(`${process.env.REACT_APP_API_BASE_URL}/users/me`, {
@@ -40,6 +41,11 @@ function Profile() {
       .then((res) => {
         updateuser(res.data);
         setProgress(100);
+        setEditbutton(!editbutton);
+        setMessage(["Profile Updated", "success"]);
+        setTimeout(() => {
+          setMessage([]);
+        }, 1200);
       })
       .catch((e) => {
         console.log(e);
@@ -61,6 +67,10 @@ function Profile() {
       .then((res) => {
         updateuser(res.data);
         setProgress(100);
+        setMessage(["Image Uploaded", "success"]);
+        setTimeout(() => {
+          setMessage([]);
+        }, 1200);
       })
       .catch((e) => {});
   };
@@ -75,14 +85,37 @@ function Profile() {
         updateuser({});
         updatelogin(false);
         localStorage.clear();
+        setMessage(["Account deleted", "success"]);
+        setTimeout(() => {
+          setMessage([]);
+        }, 1200);
       })
       .catch((e) => {
         console.log(e);
       });
   };
-
+  const deletprofilephoto = () => {
+    setProgress(40)
+    axios
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/users/me/avatar`, {
+        params: {
+          token: user.token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        updateuser(res.data);
+        setMessage(["Profile Photo Deleted", "success"]);
+        setProgress(100)
+        setTimeout(() => {
+          setMessage([]);
+        }, 1200);
+      })
+      .catch(() => {});
+  };
   return (
     <>
+      {message[0] && <Message type={message[1]} message={message[0]} />}
       <LoadingBar
         color="#00BFFF"
         progress={progress}
@@ -123,7 +156,7 @@ function Profile() {
                       onChange={handleImageUpload}
                     />
                   </div>
-                  <div className="flex justify-center items-center">
+                  <div className="flex justify- items-center">
                     <button
                       type="sumbit"
                       className="bg-blue-600 text-white py-2 px-4 rounded-lg w-128"
@@ -184,22 +217,32 @@ function Profile() {
               Edit Profile
             </button>
           ) : (
-            <button
-              className="bg-green-600 text-white py-2 px-4 rounded-lg"
-              onClick={() => {
-                handlesavebutton();
-              }}
-            >
-              Save Profile
-            </button>
+            <>
+              <button
+                onClick={deletprofilephoto}
+                className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-700"
+              >
+                Delete Profile Photo
+              </button>
+              <button
+                className="bg-green-600 text-white py-2 px-4 rounded-lg"
+                onClick={() => {
+                  handlesavebutton();
+                }}
+              >
+                Save Profile
+              </button>
+            </>
           )}
           {!editbutton ? (
-            <button
-              onClick={handledeletebutton}
-              className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-700"
-            >
-              Delete Account
-            </button>
+            <>
+              <button
+                onClick={handledeletebutton}
+                className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-700"
+              >
+                Delete Account
+              </button>{" "}
+            </>
           ) : (
             ""
           )}

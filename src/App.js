@@ -13,6 +13,7 @@ import Deletetask from "./pages/Deletetask";
 import Home from "./pages/Home";
 import Footer from "./components/Footer";
 import Notfound from "./pages/Notfound";
+import Message from "./components/Message";
 
 function App() {
   return (
@@ -85,6 +86,12 @@ function App() {
                   <Deletetask />
                 </>
               }
+            />
+              <Route
+            path="/message"
+            element={
+             <Message/>
+            }
             />
             <Route
             path="*"

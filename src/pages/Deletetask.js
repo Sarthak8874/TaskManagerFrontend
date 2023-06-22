@@ -3,17 +3,20 @@ import { LoginContext } from "../context/LoginContext";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
+import Message from "../components/Message";
 
 function Deletetask() {
   const [task, setTask] = useState([]);
+  const [message, setMessage] = useState([]);
+  const [messagetype, setMessagetype] = useState("");
   const [progress, setProgress] = useState(0);
-  const { login,updatelogin, user, updateuser } = useContext(LoginContext);
+  const { login, updatelogin, user, updateuser } = useContext(LoginContext);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if(!login){
-      navigate('/')
+    if (!login) {
+      navigate("/");
     }
     if (localStorage.getItem("storeval")) {
       updateuser(JSON.parse(localStorage.getItem("user")));
@@ -23,14 +26,19 @@ function Deletetask() {
     fetchdata();
   }, []);
   const handledeleteclick = (taskid) => {
-    setProgress(30)
+    setProgress(30);
     axios
       .delete(`${process.env.REACT_APP_API_BASE_URL}/task/${taskid}`, {
         params: { token: user.token },
       })
       .then((res) => {
-        setProgress(60)
+        setProgress(60);
         fetchdata();
+        setMessage(["Task Deleted", "success"]);
+        setMessagetype("fail");
+        setTimeout(() => {
+          setMessage([]);
+        }, 1200);
       })
       .catch((e) => {});
   };
@@ -49,6 +57,7 @@ function Deletetask() {
   };
   return (
     <>
+      {message[0] && <Message message={message[0]} type={message[1]} />}
       <LoadingBar
         color="#00BFFF"
         progress={progress}

@@ -3,9 +3,11 @@ import { LoginContext } from "../context/LoginContext";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
+import Message from "../components/Message";
 
 function Task() {
   const [task, setTask] = useState([]);
+  const [message, setMessage] = useState([]);
   const [progress, setProgress] = useState(0);
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState(false);
@@ -42,6 +44,10 @@ function Task() {
         setProgress(60);
         setEditTaskId(null);
         fetchTaskData();
+        setMessage(["Task Saved", "success"]);
+        setTimeout(() => {
+          setMessage([]);
+        }, 1200);
       })
       .catch((e) => {});
   };
@@ -60,6 +66,7 @@ function Task() {
   };
   return (
     <>
+      {message[0] && <Message type={message[1]} message={message[0]} />}
       <LoadingBar
         color="#00BFFF"
         progress={progress}

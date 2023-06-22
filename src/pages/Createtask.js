@@ -3,9 +3,11 @@ import axios from "axios";
 import { LoginContext } from "../context/LoginContext";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
+import Message from "../components/Message";
 
 function Createtask() {
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState('');
+  const [message, setMessage] = useState([]);
   const [taskDescription, setTaskDescription] = useState("");
   const { login, user } = useContext(LoginContext);
   const navigate = useNavigate();
@@ -30,6 +32,10 @@ function Createtask() {
       .then((response) => {
         setTaskDescription("");
         setProgress(100);
+        setMessage(['Task Created',"success"]);
+        setTimeout(() => {
+          setMessage([]);
+        }, 1200);
       })
       .catch((error) => {
         console.error(error);
@@ -37,6 +43,7 @@ function Createtask() {
   };
   return (
     <>
+      {message[0] && <Message type={message[1]} message={message[0]} />}
       <LoadingBar
         color="#00BFFF"
         progress={progress}
