@@ -208,6 +208,16 @@ function Task() {
                 ))}
               </tbody>
             </table>
+            {task.length === 0 ? (
+              <div class="bg-gray-100 border border-gray-300 rounded-md   text-center">
+                <p class="text-lg font-medium text-gray-700">
+                  "Boost Your Productivity with TaskPro: Create a New Task and
+                  Ignite Your Workflow!"
+                </p>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
         <div className="max-w-800 px-4 mt-4 mx-auto flex justify-between items-center">
