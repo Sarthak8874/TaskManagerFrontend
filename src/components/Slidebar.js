@@ -1,12 +1,16 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { LoginContext } from "../context/LoginContext";
 
 function Slidebar(props) {
-  const EventLinks = [
-    { Event: "Home", Link: "/", icons: "" },
-    { Event: "About", Link: "/", icons: "" },
-    { Event: "Contact us", Link: "/", icons: "" },
-    { Event: "Help", Link: "/", icons: "" },
+  const {login} = useContext(LoginContext)
+  let EventLinks = [
+    { Event: "Home", Link: "/", icons: "", login: true },
+    { Event: "ViewTask", Link: "/task", icons: "", login: login },
+    { Event: "DeleteTask", Link: "/delete-task", icons: "", login: login },
+    { Event: "Profile", Link: "/profile", icons: "", login: login },
   ];
+  EventLinks = EventLinks.filter((e) => e.login);
     return (
       <>
         <div

@@ -9,12 +9,14 @@ import { LoginContext } from "../context/LoginContext";
 function Navbar() {
   const [nav, setNav] = useState(true);
   const { login, user } = useContext(LoginContext);
-  const EventLinks = [
-    { Event: "Home", Link: "/", icons: "" },
-    { Event: "ViewTask", Link: "/task", icons: "" },
-    { Event: "DeleteTask", Link: "/delete-task", icons: "" },
-    { Event: "Profile", Link: "/profile", icons: "" },
+  let EventLinks = [
+    { Event: "Home", Link: "/", icons: "", login: true },
+    { Event: "ViewTask", Link: "/task", icons: "", login: login },
+    { Event: "DeleteTask", Link: "/delete-task", icons: "", login: login },
+    { Event: "Profile", Link: "/profile", icons: "", login: login },
   ];
+  EventLinks = EventLinks.filter((e) => e.login);
+  
   const handlemenuicon = () => {
     setNav(!nav);
   };
@@ -29,7 +31,10 @@ function Navbar() {
             {nav ? <IoMenuOutline /> : <RxCross2 />}
           </div>
           <div className="flex items-center justify-between text-white text-lg">
-           Hi<spam className='font-bold'>! {user?.user?.name ? user.user.name.split(" ")[0]:"User"}</spam>
+            Hi
+            <spam className="font-bold">
+              ! {user?.user?.name ? user.user.name.split(" ")[0] : "User"}
+            </spam>
           </div>
           <div className="hidden md:block">
             <ul className="flex h-full items-center">
@@ -57,7 +62,7 @@ function Navbar() {
               <Link to="/logout">
                 <button className="ml-2 mr-2 text-white text-center">
                   <AiOutlineUser className="w-full flex justify-center" />
-                   Logout
+                  Logout
                 </button>
               </Link>
             )}

@@ -36,7 +36,7 @@ function UserSignup() {
     e.preventDefault();
     setProgress(progress+20)
     axios
-      .post("https://taskmanagerapp-xlfw.onrender.com/users", {
+      .post(`${process.env.REACT_APP_API_BASE_URL}/users`, {
         name: name,
         email: email,
         password: password,

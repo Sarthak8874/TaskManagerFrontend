@@ -19,7 +19,7 @@ function Userlogout() {
   useEffect(() => {
     setProgress(40)
     axios
-      .post("https://taskmanagerapp-xlfw.onrender.com/users/logout", {
+      .post(`${process.env.REACT_APP_API_BASE_URL}/users/logout`, {
         token: user.token,
       })
       .then((res) => {
@@ -33,6 +33,7 @@ function Userlogout() {
         console.log(e);
       });
   }, []);
+  
   return (<>
      <LoadingBar
         color="#00BFFF"

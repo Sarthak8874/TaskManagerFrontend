@@ -12,10 +12,11 @@ function Profile() {
   const [name, setName] = useState(user?.user?.name);
   const [email, setEmail] = useState(user?.user?.email);
   const [image, setImage] = useState(null);
-  const [imagebase, setImagebase] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
+    setProgress(30);
     if (localStorage.getItem("storeval")) {
       updateuser(JSON.parse(localStorage.getItem("user")));
       updatelogin(localStorage.getItem("login"));
@@ -23,8 +24,8 @@ function Profile() {
     if (!login) {
       navigate("/");
     }
+    setProgress(100);
   }, []);
-
   const handleeditbutton = () => {
     setEditbutton(!editbutton);
   };
@@ -32,7 +33,7 @@ function Profile() {
     setEditbutton(!editbutton);
     setProgress(30);
     axios
-      .patch("https://taskmanagerapp-xlfw.onrender.com/users/me", {
+      .patch(`${process.env.REACT_APP_API_BASE_URL}/users/me`, {
         token: user.token,
         name: name,
       })
@@ -52,21 +53,34 @@ function Profile() {
     formData.append("avatar", image);
     setProgress(40);
     axios
-      .post(
-        "https://taskmanagerapp-xlfw.onrender.com/users/me/avatar",
-        formData,
-        {
-          params: {
-            token: user.token,
-          },
-        }
-      )
+      .post(`${process.env.REACT_APP_API_BASE_URL}/users/me/avatar`, formData, {
+        params: {
+          token: user.token,
+        },
+      })
       .then((res) => {
         updateuser(res.data);
         setProgress(100);
       })
       .catch((e) => {});
   };
+  const handledeletebutton = () => {
+    axios
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/users/me`, {
+        params: {
+          token: user.token,
+        },
+      })
+      .then((res) => {
+        updateuser({});
+        updatelogin(false);
+        localStorage.clear();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   return (
     <>
       <LoadingBar
@@ -93,7 +107,13 @@ function Profile() {
             {editbutton ? (
               <>
                 {" "}
-                <div className="flex flex-col">
+                <form
+                  className="flex flex-col"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleImageUploadbutton();
+                  }}
+                >
                   <div className="flex justify-center items-center">
                     <input
                       type="file"
@@ -105,15 +125,13 @@ function Profile() {
                   </div>
                   <div className="flex justify-center items-center">
                     <button
-                      onClick={() => {
-                        handleImageUploadbutton();
-                      }}
+                      type="sumbit"
                       className="bg-blue-600 text-white py-2 px-4 rounded-lg w-128"
                     >
                       Upload
                     </button>
                   </div>
-                </div>
+                </form>
               </>
             ) : (
               ""
@@ -154,26 +172,38 @@ function Profile() {
           </div>
         </div>
       </div>
-      <div className="flex w-full justify-around py-8">
-        {!editbutton ? (
-          <button
-            onClick={() => {
-              handleeditbutton();
-            }}
-            className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-700"
-          >
-            Edit Profile
-          </button>
-        ) : (
-          <button
-            className="bg-green-600 text-white py-2 px-4 rounded-lg"
-            onClick={() => {
-              handlesavebutton();
-            }}
-          >
-            Save Profile
-          </button>
-        )}
+      <div className="w-full flex justify-around">
+        <div className="flex w-full justify-around py-8 max-w-980">
+          {!editbutton ? (
+            <button
+              onClick={() => {
+                handleeditbutton();
+              }}
+              className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-700"
+            >
+              Edit Profile
+            </button>
+          ) : (
+            <button
+              className="bg-green-600 text-white py-2 px-4 rounded-lg"
+              onClick={() => {
+                handlesavebutton();
+              }}
+            >
+              Save Profile
+            </button>
+          )}
+          {!editbutton ? (
+            <button
+              onClick={handledeletebutton}
+              className="bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-700"
+            >
+              Delete Account
+            </button>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </>
   );

@@ -25,7 +25,7 @@ function Deletetask() {
   const handledeleteclick = (taskid) => {
     setProgress(30)
     axios
-      .delete(`https://taskmanagerapp-xlfw.onrender.com/task/${taskid}`, {
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/task/${taskid}`, {
         params: { token: user.token },
       })
       .then((res) => {
@@ -36,7 +36,7 @@ function Deletetask() {
   };
   const fetchdata = async () => {
     axios
-      .get("https://taskmanagerapp-xlfw.onrender.com/task", {
+      .get(`${process.env.REACT_APP_API_BASE_URL}/task`, {
         params: { token: user.token },
       })
       .then((res) => {

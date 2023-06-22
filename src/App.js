@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import "./index.css";
 import Navbar from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -11,10 +11,10 @@ import Userlogout from "./pages/Userlogout";
 import Createtask from "./pages/Createtask";
 import Deletetask from "./pages/Deletetask";
 import Home from "./pages/Home";
-import { LoginContext } from "./context/LoginContext";
+import Footer from "./components/Footer";
+import Notfound from "./pages/Notfound";
 
 function App() {
-  const { login } = useContext(LoginContext);
   return (
     <>
       <React.StrictMode>
@@ -86,7 +86,14 @@ function App() {
                 </>
               }
             />
+            <Route
+            path="*"
+            element={
+              <Notfound/>
+            }
+            />
           </Routes>
+          <Footer />
         </BrowserRouter>
       </React.StrictMode>
     </>

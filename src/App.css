@@ -3,10 +3,14 @@
 @tailwind utilities;
 
 
-.logoutbutton{
+.logoutbutton {
     font-size: .5rem;
 }
 
-.logoutbuttonuser{
+.logoutbuttonuser {
     font-size: .75rem;
+}
+
+.homemessage {
+    min-height: 90vh;
 }

@@ -33,7 +33,7 @@ function Task() {
   const handleSaveClick = () => {
     setProgress(30);
     axios
-      .patch(`https://taskmanagerapp-xlfw.onrender.com/task/${editTaskId}`, {
+      .patch(`${process.env.REACT_APP_API_BASE_URL}/task/${editTaskId}`, {
         token: user.token,
         description: description,
         completed: status,
@@ -47,7 +47,7 @@ function Task() {
   };
   const fetchTaskData = async () => {
     axios
-      .get("https://taskmanagerapp-xlfw.onrender.com/task", {
+      .get(`${process.env.REACT_APP_API_BASE_URL}/task`, {
         params: { token: user.token },
       })
       .then((res) => {
