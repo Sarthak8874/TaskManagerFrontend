@@ -21,3 +21,7 @@
     left: 0;
     border-radius: 20px;
 }
+
+html{
+    -webkit-text-size-adjust: none;
+}
