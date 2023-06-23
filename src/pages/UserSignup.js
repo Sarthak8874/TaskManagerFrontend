@@ -3,11 +3,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../context/LoginContext";
-import LoadingBar from 'react-top-loading-bar'
-
+import LoadingBar from "react-top-loading-bar";
+import Message from "../components/Message";
 
 function UserSignup() {
   const [name, setName] = useState("");
+  const [message, setMessage] = useState([]);
   const [progress, setProgress] = useState(0);
   const { updatelogin, updateuser } = useContext(LoginContext);
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ function UserSignup() {
 
   useEffect(() => {
     if (redirect) {
-      setProgress(progress+30)
+      setProgress(progress + 30);
       navigate("/profile");
     }
   }, [redirect, navigate]);
@@ -34,7 +35,7 @@ function UserSignup() {
   };
   const handlesignup = (e) => {
     e.preventDefault();
-    setProgress(progress+20)
+    setProgress(progress + 20);
     axios
       .post(`${process.env.REACT_APP_API_BASE_URL}/users`, {
         name: name,
@@ -42,41 +43,53 @@ function UserSignup() {
         password: password,
       })
       .then((res) => {
-        setProgress(progress+10)
+        setProgress(progress + 10);
         updateuser(res.data);
         updatelogin(true);
         setEmail("");
         setPassword("");
-        setProgress(progress+20)
+        setProgress(progress + 20);
         setName("");
         setErrormessage("");
-        setProgress(progress+20)
+        setProgress(progress + 20);
         setRedirect(true);
       })
       .catch((error) => {
         if (error.response && error.response.status === 400) {
           if (error.response.data.keyPattern) {
             setErrormessage("Already Have a exist Email");
-            console.log(error.response.data);
+            setMessage(["fail", "Already Have a exist Email"]);
+            setTimeout(() => {
+              setMessage([]);
+            }, 2000);
           } else {
             setErrormessage(error.response.data.message);
-            console.log(error.response.data);
+            setMessage(["fail", error.response.data.message]);
+            setTimeout(() => {
+              setMessage([]);
+            }, 2000);
           }
         } else {
           setErrormessage(error.message);
-          console.log(error.message);
+          setMessage(["fail", error.message]);
+            setTimeout(() => {
+              setMessage([]);
+            }, 2000);
         }
+        setProgress(100);
       });
   };
 
   return (
     <>
+      {message[0] && <Message type={message[0]} message={message[1]} />}
       <LoadingBar
         color="#00BFFF"
         progress={progress}
         height={4}
         onLoaderFinished={() => setProgress(0)}
       />
+
       <div className="bg-white  flex relative top-10 max-w-500 m-auto items-center justify-center">
         <form
           className="bg-white p-6 rounded-lg shadow-md w-full"

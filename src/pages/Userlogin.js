@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../context/LoginContext";
 import LoadingBar from "react-top-loading-bar";
+import Message from "../components/Message";
 
 function Userlogin() {
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState([]);
   const [progress, setProgress] = useState(0);
   const [password, setPassword] = useState("");
   const [errormessage, setErrormessage] = useState("");
@@ -47,12 +49,17 @@ function Userlogin() {
       })
       .catch((e) => {
         setErrormessage("Invalid Email or Password");
-        console.log(e);
+        setMessage(["fail", "Invalid Email or Password"]);
+        setTimeout(() => {
+          setMessage([]);
+        }, 2000);
+        setProgress(100);
       });
   };
   return (
     <>
       {" "}
+      {message[0] && <Message type={message[0]} message={message[1]} />}
       <LoadingBar
         color="#00BFFF"
         progress={progress}
